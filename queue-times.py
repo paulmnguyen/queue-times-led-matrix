@@ -106,14 +106,19 @@ class QueueTimes(SampleBase):
         # Override command-line with environment variables if provided
         if os.getenv("MATRIX_ROWS"):
             self.args.led_rows = int(os.getenv("MATRIX_ROWS"))
+            self.debug_print(f"Setting matrix rows from .env: {self.args.led_rows}")
         if os.getenv("MATRIX_COLS"):
             self.args.led_cols = int(os.getenv("MATRIX_COLS"))
+            self.debug_print(f"Setting matrix cols from .env: {self.args.led_cols}")
         if os.getenv("MATRIX_CHAIN"):
             self.args.led_chain = int(os.getenv("MATRIX_CHAIN"))
+            self.debug_print(f"Setting matrix chain from .env: {self.args.led_chain}")
         if os.getenv("MATRIX_BRIGHTNESS"):
             self.args.led_brightness = int(os.getenv("MATRIX_BRIGHTNESS"))
+            self.debug_print(f"Setting matrix brightness from .env: {self.args.led_brightness}")
         if os.getenv("MATRIX_GPIO_MAPPING"):
             self.args.led_gpio_mapping = os.getenv("MATRIX_GPIO_MAPPING")
+            self.debug_print(f"Setting GPIO mapping from .env: {self.args.led_gpio_mapping}")
         
         # Set debug mode from .env or command line argument
         self.debug = self.args.debug or self.debug
