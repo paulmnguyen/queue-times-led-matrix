@@ -28,19 +28,41 @@ This project uses a Raspberry Pi and an LED matrix to display real-time queue ti
 
 ## Usage
 
-Run the main script:
+### Quick Start
 
+1. Run the start script:
+   ```
+   ./start-matrix.sh
+   ```
+   This will create a default `.env` file if it doesn't exist and start the matrix.
 
-python main.py
+2. To install dependencies and start:
+   ```
+   ./start-matrix.sh --install
+   ```
 
+### For Automatic Startup
+
+1. Run the service installer:
+   ```
+   ./install-service.sh
+   ```
+
+2. The script will now start automatically on boot. You can control it with:
+   ```
+   sudo systemctl start queue-times-matrix
+   sudo systemctl stop queue-times-matrix
+   sudo systemctl status queue-times-matrix
+   ```
 
 ## Configuration
 
-Edit the `config.py` file to customize:
+Edit the `.env` file to customize:
 
-- LED matrix dimensions
-- Refresh rate
-- Theme parks and attractions to display
+- LED matrix dimensions (`MATRIX_ROWS`, `MATRIX_COLS`, `MATRIX_CHAIN`)
+- Park ID (`PARK_ID`) - default is 16 for Disneyland
+- Refresh intervals (`REFRESH_INTERVAL`, `RETRY_INTERVAL`)
+- Debug mode (`DEBUG`)
 
 ## Credits
 

@@ -2,16 +2,24 @@
 import time
 import random
 import requests
+import os
 from samplebase import SampleBase
 from rgbmatrix import RGBMatrix, RGBMatrixOptions
 from PIL import Image, ImageDraw, ImageFont
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 class QueueTimes(SampleBase):
     def __init__(self, *args, **kwargs):
         super(QueueTimes, self).__init__(*args, **kwargs)
-        self.parser.add_argument("-pa", "--park", help="The Park to scroll through on the RGB LED panel", default="16")
+        
+        # Add park ID argument with default from .env
+        self.parser.add_argument("-pa", "--park", help="The Park ID to display queue times for", 
+                                default=os.getenv("PARK_ID", "16"))
         self.parser.add_argument("--debug", action="store_true", help="Enable debug mode")
-        self.debug = False
+        self.debug = os.getenv("DEBUG", "false").lower() in ("true", "1", "yes")
 
     def debug_print(self, message):
         if self.debug:
@@ -75,6 +83,9 @@ class QueueTimes(SampleBase):
 
     def run(self):
         self.debug_print("Run method started")
+        refresh_interval = int(os.getenv("REFRESH_INTERVAL", "5"))
+        retry_interval = int(os.getenv("RETRY_INTERVAL", "10"))
+        
         while True:
             try:
                 self.debug_print("Entering main loop")
@@ -82,19 +93,34 @@ class QueueTimes(SampleBase):
                 random_ride = random.choice(rides)
                 self.debug_print(f"Selected ride: {random_ride['name']}")
                 self.display_wait_time(random_ride)
-                self.debug_print("Waiting for 5 seconds")
-                time.sleep(5)
+                self.debug_print(f"Waiting for {refresh_interval} seconds")
+                time.sleep(refresh_interval)
             except Exception as e:
                 print(f"An error occurred: {e}")
-                self.debug_print("Waiting for 10 seconds before retrying")
-                time.sleep(10)
+                self.debug_print(f"Waiting for {retry_interval} seconds before retrying")
+                time.sleep(retry_interval)
 
     def process(self):
         self.args = self.parser.parse_args()
-        self.debug = self.args.debug
+        
+        # Override command-line with environment variables if provided
+        if os.getenv("MATRIX_ROWS"):
+            self.args.led_rows = int(os.getenv("MATRIX_ROWS"))
+        if os.getenv("MATRIX_COLS"):
+            self.args.led_cols = int(os.getenv("MATRIX_COLS"))
+        if os.getenv("MATRIX_CHAIN"):
+            self.args.led_chain = int(os.getenv("MATRIX_CHAIN"))
+        if os.getenv("MATRIX_BRIGHTNESS"):
+            self.args.led_brightness = int(os.getenv("MATRIX_BRIGHTNESS"))
+        if os.getenv("MATRIX_GPIO_MAPPING"):
+            self.args.led_gpio_mapping = os.getenv("MATRIX_GPIO_MAPPING")
+        
+        # Set debug mode from .env or command line argument
+        self.debug = self.args.debug or self.debug
+        
         return super(QueueTimes, self).process()
 
 if __name__ == "__main__":
-    disneyland = QueueTimes()
-    if not disneyland.process():
-        disneyland.print_help()
+    queue_times = QueueTimes()
+    if not queue_times.process():
+        queue_times.print_help()
