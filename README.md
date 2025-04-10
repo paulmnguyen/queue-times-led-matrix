@@ -76,5 +76,5 @@ Edit the `.env` file to customize:
 ## Components Used
 
 - [64x64 RGB LED Matrix Panel](https://www.amazon.com/gp/product/B0BRBG71WS/ref=ppx_yo_dt_b_asin_title_o00_s00?ie=UTF8&th=1)
-- Raspberry Pi (model used: [specify your Raspberry Pi model])
+- Raspberry Pi 3
 - [RGB Matrix Bonnet for Raspberry Pi](https://www.amazon.com/gp/product/B0BC8Y447G/ref=ppx_yo_dt_b_search_asin_title?ie=UTF8&psc=1)
