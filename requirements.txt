@@ -1,0 +1,6 @@
+requests==2.26.0
+Pillow==8.3.2
+numpy==1.21.2
+RPi.GPIO==0.7.0
+python-dotenv==1.1.0
+rgbmatrix==0.0.1
