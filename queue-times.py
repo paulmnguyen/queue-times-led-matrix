@@ -103,10 +103,10 @@ class QueueTimes(SampleBase):
             draw.text((2, y_offset), line.strip(), font=font_name, fill=(255, 255, 0))
             y_offset += 12
 
-        # Use smaller font for "DOWN" indication
+        # Handle "DOWN" indication with larger X
         if not ride['is_open']:
-            # Use smaller font for "DOWN" indication (X)
-            font_down = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 18)
+            # Use larger font for "DOWN" indication (X)
+            font_down = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 30)
             try:
                 if hasattr(draw, "textbbox"):
                     # Get dimensions using textbbox (newer Pillow versions)
@@ -115,12 +115,12 @@ class QueueTimes(SampleBase):
                     wait_width, wait_height = draw.textsize(wait, font=font_down)
             except Exception as e:
                 self.debug_print(f"Error measuring wait text: {e}")
-                wait_width = len(wait) * 12  # Rough estimate
-                wait_height = 18
+                wait_width = len(wait) * 20  # Rough estimate for larger font
+                wait_height = 30
             
-            # Position wait time in bottom right
-            wait_y = height - wait_height - 5
-            wait_x = width - wait_width - 5
+            # Position X centered in bottom half of display
+            wait_y = height - wait_height - 10
+            wait_x = (width - wait_width) // 2  # Center horizontally
             draw.text((wait_x, wait_y), wait, font=font_down, fill=wait_color)
         else:
             # Regular font for normal wait times
