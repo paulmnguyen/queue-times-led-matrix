@@ -118,8 +118,8 @@ class QueueTimes(SampleBase):
                 wait_width = len(wait) * 20  # Rough estimate for larger font
                 wait_height = 30
             
-            # Position X centered in bottom half of display
-            wait_y = height - wait_height - 10
+            # Position X centered in bottom half of display with no bottom padding
+            wait_y = height - wait_height
             wait_x = (width - wait_width) // 2  # Center horizontally
             draw.text((wait_x, wait_y), wait, font=font_down, fill=wait_color)
         else:
@@ -146,8 +146,8 @@ class QueueTimes(SampleBase):
                 min_width = 20  # Rough estimate
                 min_height = 10
             
-            # Position wait time in bottom right
-            wait_y = height - wait_height - 5
+            # Position wait time in bottom right with no bottom padding
+            wait_y = height - wait_height
             wait_x = width - wait_width - min_width - 7  # Allow space for "min"
             
             # Draw wait time
