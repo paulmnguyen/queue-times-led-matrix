@@ -39,7 +39,7 @@ class QueueTimes(SampleBase):
     def display_wait_time(self, ride):
         self.debug_print(f"Displaying information for {ride['name']}")
         font_name = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 10)
-        font_wait = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 20)
+        font_wait = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 25)
         
         # Use matrix dimensions from args instead of hardcoded values
         width = self.args.led_cols * self.args.led_chain
@@ -106,7 +106,7 @@ class QueueTimes(SampleBase):
         # Handle "DOWN" indication with larger X
         if not ride['is_open']:
             # Use larger font for "DOWN" indication (X)
-            font_down = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 30)
+            font_down = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 25)
             try:
                 if hasattr(draw, "textbbox"):
                     # Get dimensions using textbbox (newer Pillow versions)
