@@ -97,10 +97,10 @@ class QueueTimes(SampleBase):
         if line:
             lines.append(line)
 
-        # Draw name lines with limited height - strictly 3 lines max
+        # Draw name lines with limited height - strictly 3 lines max, no left padding
         y_offset = 2
         for line in lines[:3]:  # Always limit to 3 lines exactly
-            draw.text((2, y_offset), line.strip(), font=font_name, fill=(255, 255, 0))
+            draw.text((0, y_offset), line.strip(), font=font_name, fill=(255, 255, 0))
             y_offset += 12
 
         # Handle "DOWN" indication with larger X
