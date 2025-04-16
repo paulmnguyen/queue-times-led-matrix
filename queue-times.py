@@ -153,9 +153,9 @@ class QueueTimes(SampleBase):
             # Draw wait time
             draw.text((wait_x, wait_y), wait, font=font_wait, fill=wait_color)
             
-            # Draw "min" next to wait time, aligned to bottom
+            # Draw "min" next to wait time on the same line (vertically centered)
             min_x = wait_x + wait_width + 2
-            min_y = wait_y + wait_height - min_height  # Align bottom with wait time
+            min_y = wait_y + (wait_height - min_height) // 2  # Center vertically with wait time
             draw.text((min_x, min_y), "min", font=font_name, fill=wait_color)
 
         self.debug_print("Image created and drawn")
