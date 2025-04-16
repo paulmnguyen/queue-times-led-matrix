@@ -39,7 +39,7 @@ class QueueTimes(SampleBase):
     def display_wait_time(self, ride):
         self.debug_print(f"Displaying information for {ride['name']}")
         font_name = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 10)
-        font_wait = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 24)
+        font_wait = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 20)
         
         # Use matrix dimensions from args instead of hardcoded values
         width = self.args.led_cols * self.args.led_chain
@@ -58,13 +58,13 @@ class QueueTimes(SampleBase):
             wait = str(ride['wait_time'])
             wait_color = (0, 255, 0)  # Green
         else:
-            wait = "DOWN"
+            wait = "X"
             wait_color = (255, 0, 0)  # Red
 
         # Draw ride name (multiline)
         lines = []
         line = ""
-        max_width = width - 4  # Leave 2px margin on each side
+        max_width = width 
         
         # Split ride name into words
         for word in name.split():
