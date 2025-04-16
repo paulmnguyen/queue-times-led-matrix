@@ -97,35 +97,65 @@ class QueueTimes(SampleBase):
         if line:
             lines.append(line)
 
-        # Draw name lines with limited height
-        max_lines = min(3, (height // 2) // 12)  # Use at most half the height for name
+        # Draw name lines with limited height - strictly 3 lines max
         y_offset = 2
-        for line in lines[:max_lines]:
+        for line in lines[:3]:  # Always limit to 3 lines exactly
             draw.text((2, y_offset), line.strip(), font=font_name, fill=(255, 255, 0))
             y_offset += 12
 
-        # Draw wait time centered
-        try:
-            if hasattr(draw, "textbbox"):
-                # Get dimensions using textbbox (newer Pillow versions)
-                _, _, wait_width, wait_height = draw.textbbox((0, 0), wait, font=font_wait)
-            else:
-                wait_width, wait_height = draw.textsize(wait, font=font_wait)
-        except Exception as e:
-            self.debug_print(f"Error measuring wait text: {e}")
-            wait_width = len(wait) * 15  # Rough estimate
-            wait_height = 24
-        
-        # Position wait time in bottom half of display
-        wait_y = height - wait_height - 8
-        wait_x = (width - wait_width) // 2
-        draw.text((wait_x, wait_y), wait, font=font_wait, fill=wait_color)
-        
-        # Draw "min" only if the ride is open
-        if ride['is_open']:
-            # Position "min" below wait time
-            min_x = (width - wait_width) // 2 + wait_width - 10
-            min_y = height - 12
+        # Use smaller font for "DOWN" indication
+        if not ride['is_open']:
+            # Use smaller font for "DOWN" indication (X)
+            font_down = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", 18)
+            try:
+                if hasattr(draw, "textbbox"):
+                    # Get dimensions using textbbox (newer Pillow versions)
+                    _, _, wait_width, wait_height = draw.textbbox((0, 0), wait, font=font_down)
+                else:
+                    wait_width, wait_height = draw.textsize(wait, font=font_down)
+            except Exception as e:
+                self.debug_print(f"Error measuring wait text: {e}")
+                wait_width = len(wait) * 12  # Rough estimate
+                wait_height = 18
+            
+            # Position wait time in bottom right
+            wait_y = height - wait_height - 5
+            wait_x = width - wait_width - 5
+            draw.text((wait_x, wait_y), wait, font=font_down, fill=wait_color)
+        else:
+            # Regular font for normal wait times
+            try:
+                if hasattr(draw, "textbbox"):
+                    # Get dimensions using textbbox (newer Pillow versions)
+                    _, _, wait_width, wait_height = draw.textbbox((0, 0), wait, font=font_wait)
+                else:
+                    wait_width, wait_height = draw.textsize(wait, font=font_wait)
+            except Exception as e:
+                self.debug_print(f"Error measuring wait text: {e}")
+                wait_width = len(wait) * 12  # Rough estimate
+                wait_height = 20
+            
+            # Measure "min" text
+            try:
+                if hasattr(draw, "textbbox"):
+                    _, _, min_width, min_height = draw.textbbox((0, 0), "min", font=font_name)
+                else:
+                    min_width, min_height = draw.textsize("min", font=font_name)
+            except Exception as e:
+                self.debug_print(f"Error measuring min text: {e}")
+                min_width = 20  # Rough estimate
+                min_height = 10
+            
+            # Position wait time in bottom right
+            wait_y = height - wait_height - 5
+            wait_x = width - wait_width - min_width - 7  # Allow space for "min"
+            
+            # Draw wait time
+            draw.text((wait_x, wait_y), wait, font=font_wait, fill=wait_color)
+            
+            # Draw "min" next to wait time on the same line (vertically centered)
+            min_x = wait_x + wait_width + 2
+            min_y = wait_y + (wait_height - min_height) // 2  # Center vertically with wait time
             draw.text((min_x, min_y), "min", font=font_name, fill=wait_color)
 
         self.debug_print("Image created and drawn")
